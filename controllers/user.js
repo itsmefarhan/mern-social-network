@@ -36,9 +36,10 @@ exports.getUsers = async (req, res) => {
 // Get user by id
 exports.getUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId).select(
-      "-password -__v"
-    );
+    const user = await User.findById(req.params.userId)
+      .select("-password -__v")
+      .populate("following", "_id name email")
+      .populate("followers", "_id name email");
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
@@ -52,9 +53,9 @@ exports.getUser = async (req, res) => {
 // Update user
 exports.updateUser = async (req, res) => {
   // Check authorization
-  if (req.params.userId !== req.user._id) {
-    return res.status(403).json({ message: "Access Denied" });
-  }
+  // if (req.params.userId !== req.user._id) {
+  //   return res.status(403).json({ message: "Access Denied" });
+  // }
 
   try {
     // find email in db
@@ -88,6 +89,64 @@ exports.deleteUser = async (req, res) => {
     return res.status(200).json({ message: "User deleted successfully" });
   } catch (err) {
     console.log(err);
+    return res.status(400).json({ error: err.message });
+  }
+};
+
+exports.addFollowing = async (req, res, next) => {
+  try {
+    await User.findByIdAndUpdate(req.body.userId, {
+      $push: { following: req.body.followId },
+    });
+    // Call next to execute addFollower function
+    next();
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+};
+
+exports.addFollower = async (req, res) => {
+  try {
+    const result = await User.findByIdAndUpdate(
+      req.body.followId,
+      { $push: { followers: req.body.userId } },
+      { new: true }
+    )
+      .select("-password -__v")
+      .populate("following", "_id name email")
+      .populate("followers", "_id name email");
+    return res.status(200).json(result);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+};
+
+exports.removeFollowing = async (req, res, next) => {
+  try {
+    await User.findByIdAndUpdate(req.body.userId, {
+      $pull: { following: req.body.unfollowId },
+      // Call next to execute removeFollower function
+    });
+    next();
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+};
+
+exports.removeFollower = async (req, res) => {
+  try {
+    const result = await User.findByIdAndUpdate(
+      req.body.unfollowId,
+      {
+        $pull: { followers: req.body.userId },
+      },
+      { new: true }
+    )
+      .select("-password -__v")
+      .populate("following", "_id name email")
+      .populate("followers", "_id name email");
+    return res.status(200).json(result);
+  } catch (err) {
     return res.status(400).json({ error: err.message });
   }
 };

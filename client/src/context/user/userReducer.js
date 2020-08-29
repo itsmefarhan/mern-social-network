@@ -17,12 +17,21 @@ export default (state, action) => {
         ...state,
         message: action.payload,
       };
-      case "UPDATE_FAIL":
-        return {
-          ...state,
-          message: action.payload,
-        };
-
+    case "UPDATE_FAIL":
+      return {
+        ...state,
+        message: action.payload,
+      };
+    case "FOLLOW":      
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case "UNFOLLOW":
+      return {
+        ...state,
+        user: action.payload,
+      };
     default:
       return state;
   }

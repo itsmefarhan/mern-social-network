@@ -9,13 +9,13 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
-import Person from "@material-ui/icons/Person";
 import Divider from "@material-ui/core/Divider";
 import Edit from "@material-ui/icons/Edit";
 import Delete from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -30,8 +30,8 @@ const useStyles = makeStyles(() => ({
 
 const Profile = (props) => {
   const classes = useStyles();
-  const { user, getUser } = useContext(UserContext);
   const { loggedInUser, deleteUser } = useContext(AuthContext);
+  const { user, getUser, follow, unfollow } = useContext(UserContext);
 
   const { id } = props.match.params;
 
@@ -48,7 +48,9 @@ const Profile = (props) => {
       props.history.push("/login");
     }
   };
-  console.log('profile', loggedInUser)
+  console.log("in profile - user", user);
+  console.log("in profile - logged in user", loggedInUser);
+
   return (
     user && (
       <Paper className={classes.paper} elevation={5}>
@@ -61,7 +63,7 @@ const Profile = (props) => {
             </ListItemAvatar>
             <ListItemText primary={user.name} secondary={user.email} />
             <ListItemSecondaryAction>
-              {loggedInUser && user && loggedInUser._id === user._id && (
+              {loggedInUser && loggedInUser._id === user._id ? (
                 <>
                   <Link to={`/user/edit/${user._id}`} className={classes.link}>
                     <IconButton color="primary">
@@ -73,6 +75,24 @@ const Profile = (props) => {
                     <Delete color="error" />
                   </IconButton>
                 </>
+              ) : user.followers.some(
+                  (follower) => follower._id === loggedInUser._id
+                ) ? (
+                <Button
+                  onClick={() => unfollow(loggedInUser._id, user._id)}
+                  variant="contained"
+                  color="secondary"
+                >
+                  UNFOLLOW
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => follow(loggedInUser._id, user._id)}
+                  variant="contained"
+                  color="primary"
+                >
+                  FOLLOW
+                </Button>
               )}
             </ListItemSecondaryAction>
           </ListItem>

@@ -38,10 +38,9 @@ export default (state, action) => {
         isAuthenticated: false,
         loggedInUser: null,
         error: null,
-        message: null,
-        users: null,
-        user: null,
-      };    
+        message: null,        
+      };
+    
     default:
       return state;
   }

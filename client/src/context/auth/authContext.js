@@ -6,8 +6,6 @@ export const AuthContext = createContext();
 
 const initialState = {
   loggedInUser: null,
-  users: null,
-  user: null,
   error: null,
   message: null,
   token: null,
@@ -89,9 +87,7 @@ const AuthContextProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        loggedInUser: state.loggedInUser,
-        users: state.users,
-        user: state.user,
+        loggedInUser: state.loggedInUser,        
         error: state.error,
         message: state.message,
         isAuthenticated: state.isAuthenticated,
@@ -99,7 +95,7 @@ const AuthContextProvider = ({ children }) => {
         login,
         loadUser,
         logout,
-        deleteUser,
+        deleteUser,        
       }}
     >
       {children}

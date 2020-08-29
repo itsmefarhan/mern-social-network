@@ -16,7 +16,7 @@ const UserContextProvider = ({ children }) => {
 
   const getUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/users");
+      const res = await axios.get("/api/users");
       // console.log(res.data);
       dispatch({ type: "GET_USERS", payload: res.data });
     } catch (err) {
@@ -50,6 +50,44 @@ const UserContextProvider = ({ children }) => {
     }
   };
 
+  // Add following / follower
+  const follow = async (userId, followId) => {
+    try {
+      const res = await axios.put(
+        "/api/users/follow",
+        { userId, followId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      dispatch({ type: "FOLLOW", payload: res.data });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Remove following / follower
+  const unfollow = async (userId, unfollowId) => {
+    try {
+      const res = await axios.put(
+        "/api/users/unfollow",
+        { userId, unfollowId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      dispatch({ type: "UNFOLLOW", payload: res.data });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -60,6 +98,8 @@ const UserContextProvider = ({ children }) => {
         getUsers,
         getUser,
         updateUser,
+        follow,
+        unfollow,
       }}
     >
       {children}
