@@ -22,7 +22,7 @@ export default (state, action) => {
         ...state,
         message: action.payload,
       };
-    case "FOLLOW":      
+    case "FOLLOW":
       return {
         ...state,
         user: action.payload,

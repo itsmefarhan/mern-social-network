@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/user/userContext";
 import { AuthContext } from "../context/auth/authContext";
 import Paper from "@material-ui/core/Paper";
@@ -16,6 +16,9 @@ import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import Follow from "../components/Follow";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -33,6 +36,12 @@ const Profile = (props) => {
   const { loggedInUser, deleteUser } = useContext(AuthContext);
   const { user, getUser, follow, unfollow } = useContext(UserContext);
 
+  const [tabValue, setTabValue] = useState(0);
+
+  const handleTabChange = (e, val) => {
+    setTabValue(val);
+  };
+
   const { id } = props.match.params;
 
   useEffect(() => {
@@ -44,12 +53,10 @@ const Profile = (props) => {
       "Are you sure you want to delete your account?"
     );
     if (permission) {
-      deleteUser(loggedInUser._id);
+      deleteUser(id);
       props.history.push("/login");
     }
   };
-  console.log("in profile - user", user);
-  console.log("in profile - logged in user", loggedInUser);
 
   return (
     user && (
@@ -71,7 +78,7 @@ const Profile = (props) => {
                     </IconButton>
                   </Link>
 
-                  <IconButton onClick={() => handleDelete()}>
+                  <IconButton onClick={handleDelete}>
                     <Delete color="error" />
                   </IconButton>
                 </>
@@ -104,6 +111,19 @@ const Profile = (props) => {
             />
           </ListItem>
         </List>
+        <Divider />
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          centered
+          indicatorColor="primary"
+        >
+          <Tab label="Posts" />
+          <Tab label="Following" />
+          <Tab label="Followers" />
+        </Tabs>
+        {tabValue === 1 && <Follow people={user && user.following} />}
+        {tabValue === 2 && <Follow people={user && user.followers} />}
       </Paper>
     )
   );

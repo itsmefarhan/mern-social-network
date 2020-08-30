@@ -10,12 +10,15 @@ const {
   addFollower,
   removeFollowing,
   removeFollower,
+  findPeopleToFollow
 } = require("../controllers/user");
 const { validateRegister, validationErrors } = require("../validators/auth");
 const { requireLogin } = require("../controllers/auth");
 
 router.route("/follow").put(requireLogin, addFollowing, addFollower);
 router.route("/unfollow").put(requireLogin, removeFollowing, removeFollower);
+
+router.route('/find').get(requireLogin, findPeopleToFollow)
 
 router
   .route("/:userId")

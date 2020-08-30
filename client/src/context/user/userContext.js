@@ -99,7 +99,7 @@ const UserContextProvider = ({ children }) => {
         getUser,
         updateUser,
         follow,
-        unfollow,
+        unfollow,        
       }}
     >
       {children}

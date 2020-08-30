@@ -150,3 +150,16 @@ exports.removeFollower = async (req, res) => {
     return res.status(400).json({ error: err.message });
   }
 };
+
+// Find people to follow
+exports.findPeopleToFollow = async (req, res) => {
+  try {
+    let user = await User.findById(req.user._id);
+    // Push logged in user into his own following list
+    user.following.push(user._id)
+    let users = await User.find({ _id: { $nin: user.following } }).select('-password -__v');    
+    res.json(users);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
