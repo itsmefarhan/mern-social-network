@@ -42,7 +42,7 @@ const Profile = (props) => {
   const classes = useStyles();
   const { loggedInUser, deleteUser } = useContext(AuthContext);
   const { user, getUser, follow, unfollow } = useContext(UserContext);
-  const { profilePosts, posts, deletePost } = useContext(PostContext);
+  const { profilePosts, posts, deletePost,likePost, unlikePost, like, unlike } = useContext(PostContext);
 
   const [tabValue, setTabValue] = useState(0);
 
@@ -56,7 +56,7 @@ const Profile = (props) => {
     getUser(id);
     profilePosts(id);
     // eslint-disable-next-line
-  }, []);
+  }, [like, unlike]);
 
   const handleDelete = () => {
     let permission = window.confirm(
@@ -138,6 +138,8 @@ const Profile = (props) => {
             posts={posts}
             loggedInUser={loggedInUser}
             deletePost={deletePost}
+            likePost={likePost}
+            unlikePost={unlikePost}          
           />
         )}
         {tabValue === 1 && <Follow people={user && user.following} />}

@@ -6,6 +6,8 @@ export const PostContext = createContext();
 
 const initialState = {
   posts: [],
+  like: [],
+  unlike: [],
 };
 
 const PostContextProvider = ({ children }) => {
@@ -59,14 +61,56 @@ const PostContextProvider = ({ children }) => {
     dispatch({ type: "DELETE_POST", payload: postId });
   };
 
+  // Like post
+  const likePost = async (userId, postId) => {
+    try {
+      const res = await axios.put(
+        `/api/posts/like`,
+        { userId, postId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      dispatch({ type: "LIKE_POST", payload: res.data });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Unlike post
+  const unlikePost = async (userId, postId) => {
+    try {
+      const res = await axios.put(
+        `/api/posts/unlike`,
+        { userId, postId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      dispatch({ type: "UNLIKE_POST", payload: res.data });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <PostContext.Provider
       value={{
         posts: state.posts,
+        like: state.like,
+        unlike: state.unlike,
         createPost,
         newsFeed,
         profilePosts,
         deletePost,
+        likePost,
+        unlikePost,        
       }}
     >
       {children}

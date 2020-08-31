@@ -6,15 +6,13 @@ import {
   Avatar,
   CardActions,
   IconButton,
-  Divider,
   Typography,
 } from "@material-ui/core";
-import Comment from "@material-ui/icons/Comment";
-import Favorite from "@material-ui/icons/Favorite";
+import Like from "@material-ui/icons/Favorite";
+import Unlike from "@material-ui/icons/FavoriteBorder";
 import Person from "@material-ui/icons/Person";
 import Delete from "@material-ui/icons/Delete";
 import { makeStyles } from "@material-ui/core/styles";
-import CommentForm from "../../components/post/Comment";
 
 const useStyles = makeStyles(() => ({
   list: {
@@ -38,7 +36,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Feed = ({ posts, loggedInUser, deletePost }) => {
+const Feed = ({ posts, loggedInUser, deletePost, likePost, unlikePost }) => {
   const classes = useStyles();
 
   return (
@@ -66,21 +64,25 @@ const Feed = ({ posts, loggedInUser, deletePost }) => {
           <Typography>{post.text}</Typography>
         </CardContent>
         <CardActions className={classes.bg}>
-          <label htmlFor="icon-button-file">
-            <IconButton color="secondary" component="span">
-              <Favorite />
+          {post.likes.find((like) => like === loggedInUser._id) ? (
+            <IconButton
+              color="secondary"
+              component="span"
+              onClick={() => unlikePost(loggedInUser._id, post._id)}
+            >
+              <Like />
             </IconButton>
-            {post.likes.length}
-          </label>
-          <label htmlFor="icon-button-file">
-            <IconButton color="secondary" component="span">
-              <Comment />
+          ) : (
+            <IconButton
+              color="secondary"
+              component="span"
+              onClick={() => likePost(loggedInUser._id, post._id)}
+            >
+              <Unlike />
             </IconButton>
-            {post.comments.length}
-          </label>
-          <Divider />
+          )}
+          {post.likes.length}
         </CardActions>
-        <CommentForm />
       </Card>
     ))
   );

@@ -20,6 +20,16 @@ export default (state, action) => {
         ...state,
         posts: state.posts.filter((post) => post._id !== action.payload),
       };
+    case "LIKE_POST":
+      return {
+        ...state,
+        like: action.payload,
+      };
+    case "UNLIKE_POST":
+      return {
+        ...state,
+        unlike: action.payload,
+      };
     default:
       return state;
   }

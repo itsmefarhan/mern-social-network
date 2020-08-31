@@ -20,7 +20,6 @@ exports.newsFeed = async (req, res) => {
     // Push logged in user into his own following list
     user.following.push(user._id);
     const posts = await Post.find({ postedBy: { $in: user.following } })
-      .populate("comments.postedBy", "_id name")
       .populate("postedBy", "_id name")
       .sort("-createdAt");
     res.json(posts);
@@ -33,7 +32,6 @@ exports.newsFeed = async (req, res) => {
 exports.userPosts = async (req, res) => {
   try {
     const posts = await Post.find({ postedBy: req.params.userId })
-      .populate("comments.postedBy", "_id name")
       .populate("postedBy", "_id name")
       .sort("-createdAt");
     res.json(posts);
@@ -50,6 +48,38 @@ exports.deletePost = async (req, res) => {
     }
     await post.remove();
     res.json({ message: "Post delete successfully" });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+exports.likePost = async (req, res) => {
+  try {
+    const result = await Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $push: { likes: req.body.userId },
+      },
+      { new: true }
+    );
+
+    return res.json(result);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+exports.unlikePost = async (req, res) => {
+  try {
+    const result = await Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $pull: { likes: req.body.userId },
+      },
+      { new: true }
+    );
+
+    return res.json(result);
   } catch (err) {
     console.log(err.message);
   }

@@ -52,7 +52,6 @@ const Menu = (props) => {
               Logout
             </Link>
           ) : (
-            // <Button onClick={logout} className={classes.links}>Logout</Button>
             <>
               <Link to="/register" className={classes.links}>
                 Register

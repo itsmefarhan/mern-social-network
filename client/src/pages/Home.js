@@ -22,12 +22,20 @@ const Home = () => {
   const classes = useStyles();
 
   const { loggedInUser } = useContext(AuthContext);
-  const { newsFeed, posts, deletePost } = useContext(PostContext);
+  const {
+    newsFeed,
+    posts,
+    deletePost,
+    likePost,
+    unlikePost,
+    like,
+    unlike,
+  } = useContext(PostContext);
 
   useEffect(() => {
     newsFeed(loggedInUser._id);
     // eslint-disable-next-line
-  }, []);
+  }, [like, unlike]);
 
   return (
     <Container>
@@ -43,6 +51,8 @@ const Home = () => {
               posts={posts}
               loggedInUser={loggedInUser}
               deletePost={deletePost}
+              likePost={likePost}
+              unlikePost={unlikePost}
             />
           </>
         </Grid>
