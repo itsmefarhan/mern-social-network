@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { UserContext } from "../context/user/userContext";
+import { UserContext } from "../../context/user/userContext";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
@@ -31,6 +31,7 @@ const Users = () => {
 
   useEffect(() => {
     getUsers();
+    // eslint-disable-next-line
   }, []);
 
   return (

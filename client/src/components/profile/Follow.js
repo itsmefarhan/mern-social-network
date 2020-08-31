@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Follow = (props) => {
-  console.log(props);
+  // console.log(props);
   const classes = useStyles();
   return (
     <div className={classes.root}>

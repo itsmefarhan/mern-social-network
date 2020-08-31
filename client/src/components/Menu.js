@@ -5,7 +5,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, withRouter } from "react-router-dom";
 import { AuthContext } from "../context/auth/authContext";
-import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -43,7 +42,7 @@ const Menu = (props) => {
       <AppBar position="static">
         <Toolbar>
           <Link to="/" className={classes.title}>
-            <Typography variant="h6">MERN Boilerplate</Typography>
+            <Typography variant="h6">Social Meetup</Typography>
           </Link>
           <Link to="/users" className={classes.links}>
             Users

@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const AuthContext = createContext();
 
-const initialState = {
+const initialState = {  
   loggedInUser: null,
   error: null,
   message: null,

@@ -13,15 +13,15 @@ import {
 } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
 import { Link } from "react-router-dom";
-import { UserContext } from "../context/user/userContext";
-import { AuthContext } from "../context/auth/authContext";
+import { UserContext } from "../../context/user/userContext";
+import { AuthContext } from "../../context/auth/authContext";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 
 const useStyles = makeStyles(() => ({
   heading: {
     padding: "20px",
-    color:'dimgrey'
+    color: "dimgrey",
   },
 }));
 
@@ -46,7 +46,6 @@ const WhoToFollow = () => {
     whoToFollow();
   }, [follow]);
 
-  console.log(users);
   return users.length ? (
     <Fragment>
       <Paper elevation={3}>
